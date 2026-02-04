@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 import { 
-  Mail, Phone, MapPin, Github, Linkedin, 
+  Mail, Phone, Github, Linkedin, 
   Code, Database, Server, Globe, Users, 
   MessageSquare, Zap, Sun, Moon,
-  ExternalLink, Calendar, Award, BookOpen,
-  ChevronDown, Menu, X, Heart, Star, Sparkles
+  ExternalLink, Award,
+  X, Heart, Star, Sparkles
 } from 'lucide-react'
 
 export default function Home() {
@@ -19,6 +19,7 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [hearts, setHearts] = useState<Array<{ id: number; left: number }>>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<any>(null)
   
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -129,42 +130,81 @@ export default function Home() {
       role: 'Project Lead',
       description: 'Led enhancement of internal ticketing system for IT and service-related concerns. Refined workflows and ensured system stability for production deployment.',
       tech: ['Laravel', 'MySQL', 'Git'],
-      gradient: 'from-purple-400 to-violet-400'
+      fullDescription: 'Comprehensive ticketing system that streamlined IT support processes across the organization. Implemented automated workflow routing, priority-based assignment, and real-time status tracking. The system reduced response times by 60% and improved customer satisfaction scores.',
+      gradient: 'from-purple-400 to-violet-400',
+      images: [
+        '/images/projects/project-1-1.png',
+        '/images/projects/project-1-2.png',
+        '/images/projects/project-1-3.png'
+      ]
     },
     {
       title: '4PH Beneficiary Application Platform',
       role: 'Lead Developer',
       description: 'Developed secure application system with admin monitoring, status tracking, and CAPTCHA validation. Configured staging with Ubuntu and Nginx.',
+      fullDescription: 'Government beneficiary management platform handling thousands of applications. Built with multi-level approval workflows, document management, SMS notifications, and comprehensive audit trails. Deployed on secure government infrastructure.',
       tech: ['Laravel', 'MySQL', 'JavaScript', 'Ubuntu', 'Nginx'],
-      gradient: 'from-indigo-400 to-purple-400'
+      gradient: 'from-indigo-400 to-purple-400',
+      images: [
+        '/images/projects/project-2-1.png',
+        '/images/projects/project-2-2.png',
+        '/images/projects/project-2-3.png',
+        '/images/projects/project-2-4.png',
+        '/images/projects/project-2-5.png'
+      ]
     },
     {
       title: 'Action Tracker & Monitoring System',
       role: 'Lead Developer',
       description: 'Built integrated system for form submission, application monitoring, and ticketing. Implemented security measures and managed GitHub workflows.',
+      fullDescription: 'Enterprise-level monitoring system with real-time dashboards, automated alerts, and comprehensive reporting. Features include API integrations, data visualization, and role-based access control.',
       tech: ['Laravel', 'MySQL', 'Git', 'Ubuntu', 'Nginx'],
-      gradient: 'from-teal-400 to-cyan-400'
+      gradient: 'from-teal-400 to-cyan-400',
+      images: [
+        '/images/projects/project-3-1.png',
+        '/images/projects/project-3-2.png',
+        '/images/projects/project-3-3.png',
+        '/images/projects/project-3-4.png',
+        '/images/projects/project-3-5.png'
+      ]
     },
     {
       title: 'Library Management with QR Code',
       role: 'Developer',
       description: 'Developed backend and frontend for library system with QR code scanning, secure data handling, and CAPTCHA protection.',
+      fullDescription: 'Modern library management system with QR code integration for book tracking, member management, and automated fine calculations. Includes mobile-responsive interface and offline capability.',
       tech: ['Laravel', 'MySQL', 'JavaScript'],
-      gradient: 'from-emerald-400 to-green-400'
+      gradient: 'from-emerald-400 to-green-400',
+      images: [
+        '/images/projects/project-4.png'
+      ]
     },
     {
-      title: 'Academic Services Portal',
-      role: 'Co-Developer',
-      description: 'Created specialized Google Site for UST Engineering Department, accessible to email holders with comprehensive faculty communication features.',
-      tech: ['Google Sites', 'HTML', 'CSS'],
-      gradient: 'from-amber-400 to-yellow-400'
+      title: 'Kindergarten Courseware',
+      role: 'Developer',
+      description: 'Led enhancement of an internal ticketing system for IT and service-related concerns. Refined ticket workflows and prepared the system for production deployment. Assisted in live rollout and ensured system stability.',
+      fullDescription: 'Educational courseware system designed for kindergarten students with interactive learning modules, progress tracking, and teacher management tools. Built with child-friendly interface and comprehensive reporting features.',
+      tech: ['Laravel', 'MySQL', 'Git'],
+      gradient: 'from-amber-400 to-yellow-400',
+      images: [
+        '/images/projects/project-5-1.png',
+        '/images/projects/project-5-2.png',
+        '/images/projects/project-5-3.png',
+        '/images/projects/project-5-4.png',
+        '/images/projects/project-5-5.png'
+      ]
     },
     {
       title: 'USAsales101 Website Modification',
       role: 'Web Developer',
       description: 'Enhanced GoDaddy website with custom HTML, created Figma mockups, and improved responsive design for better user experience.',
+      fullDescription: 'Complete website redesign focusing on conversion optimization and user experience. Implemented modern design principles, improved loading speeds, and enhanced mobile responsiveness resulting in 40% increase in user engagement.',
       tech: ['HTML', 'CSS', 'Figma', 'GoDaddy'],
-      gradient: 'from-rose-400 to-pink-400'
+      gradient: 'from-rose-400 to-pink-400',
+      link: 'https://usasales101.com/',
+      images: [
+        '/images/projects/project-6.png'
+      ]
     }
   ]
 
@@ -395,7 +435,7 @@ export default function Home() {
             className="text-5xl font-bold text-center mb-16 text-gradient"
             style={{ fontFamily: 'Dancing Script' }}
           >
-            Client Success Stories
+            My Projects ✨
             <Award className="inline ml-4 text-purple-400" size={40} />
           </motion.h2>
           
@@ -403,43 +443,68 @@ export default function Home() {
             {projects.map((project, index) => (
               <motion.div
                 key={index}
-                className="card p-6 group cursor-pointer relative overflow-hidden"
-                whileHover={{ y: -10 }}
+                className="card group cursor-pointer relative overflow-hidden"
+                onClick={() => {
+                  if (project.link) {
+                    window.open(project.link, '_blank')
+                  } else {
+                    setSelectedProject(project)
+                  }
+                }}
               >
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-bl-3xl flex items-center justify-center">
-                  <ExternalLink className="text-purple-600" size={20} />
-                </div>
-                
-                <div className="mb-4">
-                  <span className={`bg-gradient-to-r ${project.gradient} text-white px-4 py-2 rounded-full text-sm font-medium`}>
-                    {project.role}
-                  </span>
-                </div>
-                
-                <h3 className="text-xl font-semibold mb-3 pr-16">{project.title}</h3>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed">{project.description}</p>
-                
-                <div className="mb-4">
-                  <div className="text-xs text-gray-500 mb-2">Technologies Used:</div>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tech.map((tech, techIndex) => (
-                      <span
-                        key={techIndex}
-                        className="bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 px-3 py-1 rounded-full text-xs font-medium border border-purple-200"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                <div className="aspect-video bg-gradient-to-br from-purple-100 to-indigo-100 relative overflow-hidden">
+                  <img
+                    src={project.images?.[0] || `/images/projects/project-${index + 1}.png`}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const nextSibling = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (nextSibling) nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-200 to-indigo-200 flex items-center justify-center" style={{display: 'none'}}>
+                    <span className="text-purple-600 text-4xl">📸</span>
+                  </div>
+                  <div className="absolute top-4 right-4">
+                    <div className="bg-black/20 p-2 rounded-full text-white text-xs">
+                      {project.images?.length || 1} photos
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <div className="flex items-center space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
+                <div className="p-6">
+                  <div className="mb-4">
+                    <span className={`bg-gradient-to-r ${project.gradient} text-white px-4 py-2 rounded-full text-sm font-medium`}>
+                      {project.role}
+                    </span>
                   </div>
-                  <span className="text-xs text-gray-500">Client Satisfied</span>
+                  
+                  <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
+                  <p className="text-gray-600 mb-4 text-sm leading-relaxed">{project.description}</p>
+                  
+                  <div className="mb-4">
+                    <div className="text-xs text-gray-500 mb-2">Technologies Used:</div>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((tech, techIndex) => (
+                        <span
+                          key={techIndex}
+                          className="bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 px-3 py-1 rounded-full text-xs font-medium border border-purple-200"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center space-x-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <span className="text-xs text-gray-500">Completed</span>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -451,8 +516,8 @@ export default function Home() {
               className="btn-primary inline-flex items-center"
               whileHover={{ scale: 1.05 }}
             >
-              <MessageSquare className="inline mr-2" size={20} />
-              Start Your Project
+              <Code className="inline mr-2" size={20} />
+              View All Projects
             </motion.a>
           </div>
         </div>
@@ -618,6 +683,81 @@ export default function Home() {
           <p className="text-white/80">&copy; 2024 All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Project Modal */}
+      {selectedProject && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedProject(null)}>
+          <motion.div 
+            className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <span className={`bg-gradient-to-r ${selectedProject.gradient} text-white px-4 py-2 rounded-full text-sm font-medium`}>
+                    {selectedProject.role}
+                  </span>
+                  <h3 className="text-3xl font-bold mt-4 mb-2">{selectedProject.title}</h3>
+                </div>
+                <button 
+                  onClick={() => setSelectedProject(null)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-semibold mb-3">Project Overview</h4>
+                  <p className="text-gray-600 mb-6 leading-relaxed">{selectedProject.fullDescription}</p>
+                  
+                  <h4 className="font-semibold mb-3">Technologies Used</h4>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {selectedProject.tech.map((tech: string, techIndex: number) => (
+                      <span
+                        key={techIndex}
+                        className="bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 px-3 py-2 rounded-full text-sm font-medium border border-purple-200"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold mb-3">Project Gallery</h4>
+                  <div className="space-y-4">
+                    {selectedProject.images?.map((image: string, imgIndex: number) => (
+                      <div key={imgIndex} className="aspect-video bg-gray-100 rounded-xl overflow-hidden">
+                        <img
+                          src={image}
+                          alt={`${selectedProject.title} - Image ${imgIndex + 1}`}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const nextSibling = e.currentTarget.nextElementSibling as HTMLElement;
+                            if (nextSibling) nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="w-full h-full bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center" style={{display: 'none'}}>
+                          <span className="text-purple-600 text-2xl">📸</span>
+                        </div>
+                      </div>
+                    )) || (
+                      <div className="aspect-video bg-gray-100 rounded-xl flex items-center justify-center">
+                        <span className="text-gray-400 text-2xl">📸 No images available</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }
